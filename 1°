@@ -1,0 +1,49 @@
+# Series-de-Tiempo
+x <-1:25 #definir una secuencia de 1 a 25
+x
+mean(x)
+ls() #muestra cuantos objetos tenemos
+y <- 2:19
+ls()
+x2 <-c(1,5,8,9,3) # la flechita es un "vector de asignación" 
+x3 <-c(1.58, 2.5, 8.9, 1.4 ) 
+y2 <- seq(8,80,4) #una secuencia de numeros de 8 a 80 de 4 en 4
+y3 <- seq(3,30,1.5)
+length(y3) #muestra la longitud del vector
+mean(x)# es la media del vector
+media<-sum(x)/length(x) #length es nuestra "n"------- es la creación de una función
+?sum
+rm(x) #para borrar un objeto
+ls()
+rm(list=ls())# se borra todo 
+ls()
+nse <-c("alto", "medio", "bajo")   # nse= nivel socio económico
+tds <-c("O+", "O-","A", "B")       # tsd= tipo de sangre
+
+#############    Vectores con Distribución de Probabilidad    ################
+x<-rnorm(100)  #para que nos de valores aleatorios de la normal
+x
+plot(x) #simulación gráfica
+b<-1:100
+b
+plot(b,x)
+y=x+rnorm(100,mean=50,sd=.5) #sd=desviación estandar
+cor(x,y)#se obtiene el valor de la correlación
+mean(y)
+var(y)
+sd(y)#desviación estándar
+sqrt(var(y)) #desviación estándar
+
+#############    Operadores Relacionales   ################
+# <,>,<=,>=,==,!=
+8==7.9999999999999999999999
+8==7.9
+x<-17
+x==17
+x<=19
+# "&" y "|" = "y" y "O"
+a<-1:300
+a[a<b&a<3]
+
+
+
