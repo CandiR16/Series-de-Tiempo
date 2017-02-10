@@ -1,0 +1,6 @@
+install.packages("readxl") #paquete para lectura de excel
+library (readxl)
+rates<-read_excel("C://Users//Sala-F6//Desktop//candi//petroleo.xlsx")
+# Declaramos como serie de tiempo
+petroleo.ts<-ts (petroleo,frequency = 1,start=(1))#función time series (ts)
+plot(petroleo.ts, ylab="petroleo", xlab="Periódo", main="Precio Diario del Petroleo", col=2)
