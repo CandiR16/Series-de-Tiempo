@@ -1,0 +1,46 @@
+####################################     Matrices     ###################################
+matriz1<-matrix(c(2,4,20,40,200,400,2000,4000,-2,-4,-20,-40,-200,-400,-2000,-4000),4,4)
+matriz1
+matriz1[4,1]
+matriz1[2,2]
+matriz1[,c(2,3)] #muestra las columnas que pedimos
+matriz1%*%matriz1  #para realizar operaciones de matrices deben llevar % para que haga la multiplicacion de matrices
+matriz1*matriz1   # si no lleva % solo se hace elemento por elemento ()
+?cbind #combinar columnas a traves de las matrices
+?rbind 
+matriz2<-matrix(c(1,2,3,4,5,6,7,8),2,4)
+matriz2
+matriz3<-cbind(c(10,20,30,40),matriz2[,4])
+matriz3
+##rbind combinar filas
+matriz4 <-matrix(c(8,7,6,5,4,3,2,1),4,2)
+matriz4
+matriz5<-rbind(matriz1[2,],matriz4[2,])
+matriz5
+matriz1
+
+getwd()
+setwd("C://Users//Sala-F6//Desktop//candi")
+install.packages("foreign")
+library (foreign)
+require (foreign)
+datastata<-read.dta("C://Users//Sala-F6//Desktop//candi//clase1.dta")
+head(datastata) ## nos muesta el encabezado los primero datos
+colnames(datastata) #nos da los nombres de las variables
+datastata[3,5]
+datastata[1:20,"edad"]
+datastata[c(1,5,7),2]  #nos da los valores 1,5 y 7 de la  variable 2
+colnames(datastata)[2]<-"ingreso" #para renombrar variables
+datastata
+colnames(datastata)
+
+
+####################################     Descriptivos     ###################################
+summary(datastata)
+save(datastata,file="C://Users//Sala-F6//Desktop//candi//clase1yo.RData")  #para guardar en r
+load("C://Users//Sala-F6//Desktop//candi//clase1yo.RData")
+
+install.packages("haven")
+require(haven)
+library(haven)
+clase1<-read_dta("C://Users//Sala-F6//Desktop//candi//clase1.dta")
