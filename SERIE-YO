@@ -1,3 +1,5 @@
 setwd("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo")
 INPP<-data.frame(read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//INP_INP20170214213459.xls"))
 http://www.inegi.org.mx/sistemas/indiceprecios/Estructura.aspx?idEstructura=1120008000600010&T=%C3%8Dndices%20de%20Precios%20al%20Productor&ST=Actualizaci%C3%B3n%20de%20costos%20de%20las%20obras%20p%C3%BAblicas
+
+http://www.inegi.org.mx/est/contenidos/Proyectos/INP/PreguntasINPP.aspx
