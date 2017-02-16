@@ -1,0 +1,20 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+library (readxl)
+require(readxl)
+petroleo<-read_excel("C://Users//Sala-F3//Desktop//candi//petroleo.xlsx")
+# Declaramos como serie de tiempo
+petroleo.ts<-ts (petroleo,frequency = 1,start=(1))#función time series (ts)
+plot(petroleo.ts, ylab="petroleo", xlab="Periódo", main="Precio Diario del Petroleo", col=4)
+
+petroleo5.ts<-ts (petroleo,frequency = 5,start=(1))
+petroleo1<-decompose(petroleo5.ts,"additive")
+plot(petroleo1)
+?decompose
+plot(as.ts(petroleo1$seasonal))  #seasonal->  estacional
+plot(as.ts(petroleo1$trend))      #trend->   tendencia
+plot(as.ts(petroleo1$random))     #random->  aleatorio o irregular
+plot((petroleo1))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(petroleo1$seasonal))
