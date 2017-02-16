@@ -1,0 +1,21 @@
+rmx<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//ruralmexico.xlsx")
+rmx.ts<-ts (rmx,frequency = 1,start=(1))#función time series (ts)
+plot(rmx.ts, ylab="población", xlab="periodo", main="población rural en México", col="BLUE")
+
+
+rmx5.ts<-ts (rmx,frequency = 5,start=(1))
+rmx.desc<-decompose(rmx5.ts,"additive")
+plot(rmx.desc, col="red")
+plot(stl(log(rmx5.ts),s.window="periodic"))  #otra forma de graficar
+ts.plot(rmx.desc$x, main="población rural en México") ##grafica con fechas
+
+
+plot(as.ts(rmx.desc$seasonal))  #seasonal->  estacional
+plot(as.ts(rmx.desc$trend))      #trend->   tendencia
+plot(as.ts(rmx.desc$random))     #random->  aleatorio o irregular
+plot((rmx.desc))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(rmx.desc$seasonal))
+plot(diff(rmx.desc$trend))
+plot(diff(rmx.desc$randoml))
