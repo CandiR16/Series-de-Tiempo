@@ -1,0 +1,23 @@
+r.mort<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//mort_rate.xlsx")
+r.mort.ts<-ts (r.mort,frequency = 1,start=(1))#función time series (ts)
+plot(r.mort.ts, ylab="mortalidad", xlab="periodo", main="tasa de mortalidad", col="BLUE")
+
+
+r.mort5.ts<-ts (r.mort,frequency = 5,start=(1))
+r.mort.desc<-decompose(r.mort5.ts,"additive")
+plot(r.mort.desc, col="red")
+plot(stl(log(r.mort5.ts),s.window="periodic"))  #otra forma de graficar
+ts.plot(r.mort.desc$x, main="tasa de mortalidad") ##grafica con fechas
+
+
+plot(as.ts(r.mort.desc$seasonal))  #seasonal->  estacional
+plot(as.ts(r.mort.desc$trend))      #trend->   tendencia
+plot(as.ts(r.mort.desc$random))     #random->  aleatorio o irregular
+plot((r.mort.desc))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(r.mort.desc$seasonal))
+plot(diff(r.mort.desc$trend))
+plot(diff(r.mort.desc$randoml))
+
+rm (list= ls())
