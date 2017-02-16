@@ -1,0 +1,22 @@
+#############     Indice Nacional de Precios al Productor (INPP)      #############
+## Actualización de costos de las obras públicas, Combustibles automotores y lubricantes
+## Diesel
+## Periodo mensual de enero-1981 a enero-2017
+
+inpp<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//INPP1981-2017.xlsx")
+inpp.ts<-ts (inpp,frequency = 1,start=(1981), end=(2017))#función time series (ts)
+plot(inpp.ts, ylab="INPP", xlab="MESES", main="Indice Nacional de Precios al Productor", col=4)
+
+innp5.ts<-ts (inpp,frequency = 5,start=(1))
+innp.desc<-decompose(innp5.ts,"additive")
+plot(innp.desc)
+
+plot(as.ts(innp.desc$seasonal))  #seasonal->  estacional
+plot(as.ts(innp.desc$trend))      #trend->   tendencia
+plot(as.ts(innp.desc$random))     #random->  aleatorio o irregular
+plot((innp.desc))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(innp.desc$seasonal))
+plot(diff(innp.desc$trend))
+plot(diff(innp.desc$randoml))
