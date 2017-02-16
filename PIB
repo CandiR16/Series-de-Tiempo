@@ -1,0 +1,22 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+library (readxl)
+require(readxl)
+require(foreign)
+gdp<-read_excel("C://Users//Sala-F3//Desktop//candi//gdpmexico.xlsx")
+# Declaramos como serie de tiempo
+pib.ts <- ts (gdp,frequency = 1,start=(1))#función time series (ts)
+plot(pib.ts, ylab="petroleo", xlab="Periódo", main="PIB", col=4)
+
+PIB5.ts<-ts (pib.ts,frequency = 5,start=(1))
+PIB.DESC<-decompose(PIB5.ts,"additive")
+plot(PIB.DESC)
+?decompose
+plot(as.ts(PIB.DESC$seasonal))  #seasonal->  estacional
+plot(as.ts(PIB.DESC$trend))      #trend->   tendencia
+plot(as.ts(PIB.DESC$random))     #random->  aleatorio o irregular
+plot((PIB.DESC))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(PIB.DESC$seasonal))
+locator()  #PARA DAR COORDENADAS
