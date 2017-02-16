@@ -1,0 +1,21 @@
+rates<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//rates.xlsx")
+rates.ts<-ts (rates,frequency = 1,start=(1))#función time series (ts)
+plot(rates.ts, ylab="rates", xlab="time", main="RATES", col="green")
+
+
+rates5.ts<-ts (rates,frequency = 5,start=(1))
+rates.desc<-decompose(rates5.ts,"additive")
+plot(rates.desc, col="yellow")
+plot(stl(log(rates5.ts),s.window="periodic"))  #otra forma de graficar
+ts.plot(rates.desc$x, main="RATES") ##grafica con fechas
+
+
+plot(as.ts(rates.desc$seasonal))  #seasonal->  estacional
+plot(as.ts(rates.desc$trend))      #trend->   tendencia
+plot(as.ts(rates.desc$random))     #random->  aleatorio o irregular
+plot((rates.desc))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(rates.desc$seasonal))
+plot(diff(rates.desc$trend))
+plot(diff(rates.desc$randoml))
