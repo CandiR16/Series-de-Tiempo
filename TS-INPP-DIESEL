@@ -3,13 +3,42 @@
 ## Diesel
 ## Periodo mensual de enero-1981 a enero-2017
 
+# El Índice Nacional de Precios Productor (INPP) es un conjunto de indicadores de precios. Su finalidad es la de proporcionar
+#   mediciones sobre la variación de los precios de una canasta fija de bienes y servicios representativa de la producción nacional.
+# El precio productor se define como la cantidad de dinero recibida por el productor, de parte del comprador, por cada unidad de un 
+#   bien o servicio generado como producción, sin incluir el impuesto al valor agregado (IVA) u otro tipo de impuestos facturados al
+#   comprador. Además, dicha cotización excluye cualquier cargo de transporte que no estuviera incluido en el precio y tuviera que 
+#   facturarse por separado. Estos precios son recabados mensualmente con carácter confidencial y de manera voluntaria.
+
+# La importancia del INPP reside en la incertidumbre que introducen los cambios en los precios en el análisis económico.
+# Así, el INPP es una gran ayuda para la toma de decisiones de los diversos agentes económicos como el gobierno, las empresas, 
+#   universidades y el público en general. Constituye un instrumento estadístico que ayuda a reducir tal incertidumbre.
+
+# Su finalidad principal es la medición de la inflación “por el lado de la producción” a diferencia del INPC que la mide por 
+#   el lado del consumo. Lo anterior permite contar con un instrumento alternativo para anticipar la trayectoria de la inflación oficial;
+# Es un indicador fidedigno de las tendencias inflacionarias de corto plazo;
+# Mediante el INPP es factible detectar con mayor oportunidad los “focos que originan” el proceso inflacionario y ver cómo se
+#   propagan a lo largo de la cadena productiva;
+# Es factor de indexación para infinidad de contratos públicos como los relativos a obra pública así como para contratos privados;
+# Se emplea para revisar algunas tarifas del sector eléctrico;
+# Es una herramienta de apoyo para los encargados de elaborar las Cuentas Nacionales;
+# Es un instrumento requerido por organizaciones internacionales para realizar comparaciones y monitoreo de la evolución de los
+#   precios del país;
+# Es un indicador estadístico para empresas e investigadores; y,
+# Permite la obtención de magnitudes “reales” bajo el criterio de precios productor, a partir de información económica expresada en 
+#   términos “nominales”.
+
 inpp<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//INPP1981-2017.xlsx")
-inpp.ts<-ts (inpp,frequency = 1,start=(1981), end=(2017))#función time series (ts)
+inpp.ts<-ts (inpp,frequency = 1,start=(1981), end=(2017))  #función time series (ts)
 plot(inpp.ts, ylab="INPP", xlab="MESES", main="Indice Nacional de Precios al Productor", col=4)
 
-innp5.ts<-ts (inpp,frequency = 5,start=(1))
+innp5.ts<-ts (inpp$inpp,frequency = 5,start=(1981), end=(2017))
 innp.desc<-decompose(innp5.ts,"additive")
-plot(innp.desc)
+plot(innp.desc, col="yellow")
+plot(stl(log(innp5.ts),s.window="periodic"))  #otra forma de graficar
+ts.plot(innp.desc$x, main="INNP") ##grafica con fechas
+
+
 
 plot(as.ts(innp.desc$seasonal))  #seasonal->  estacional
 plot(as.ts(innp.desc$trend))      #trend->   tendencia
