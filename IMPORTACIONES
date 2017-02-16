@@ -1,0 +1,21 @@
+rates<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//importa.xlsx")
+imp.ts<-ts (imp,frequency = 1,start=(1))#función time series (ts)
+plot(imp.ts, ylab="importaciones", xlab="periodo", main="IMPORTACIONES", col="BLUE")
+
+
+imp5.ts<-ts (imp,frequency = 5,start=(1))
+imp.desc<-decompose(imp5.ts,"additive")
+plot(imp.desc, col="red")
+plot(stl(log(imp5.ts),s.window="periodic"))  #otra forma de graficar
+ts.plot(imp.desc$x, main="IMPORTACIONES") ##grafica con fechas
+
+
+plot(as.ts(imp.desc$seasonal))  #seasonal->  estacional
+plot(as.ts(imp.desc$trend))      #trend->   tendencia
+plot(as.ts(imp.desc$random))     #random->  aleatorio o irregular
+plot((imp.desc))               #descompone en los cuatro elementos
+
+par(mfrow=c(3,1))
+plot(diff(imp.desc$seasonal))
+plot(diff(imp.desc$trend))
+plot(diff(imp.desc$randoml))
