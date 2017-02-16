@@ -1,4 +1,4 @@
-rates<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//importa.xlsx")
+imp<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//importa.xlsx")
 imp.ts<-ts (imp,frequency = 1,start=(1))#función time series (ts)
 plot(imp.ts, ylab="importaciones", xlab="periodo", main="IMPORTACIONES", col="BLUE")
 
