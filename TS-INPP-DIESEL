@@ -28,7 +28,7 @@
 # Permite la obtención de magnitudes “reales” bajo el criterio de precios productor, a partir de información económica expresada en 
 #   términos “nominales”.
 
-inpp<-read_excel("C://Users//LORENZA//Desktop//ACT 8°//Series de Tiempo//INPP1981-2017.xlsx")
+inpp<-read_excel("//INPP1981-2017.xlsx")
 inpp.ts<-ts (inpp,frequency = 1,start=(1981), end=(2017))  #función time series (ts)
 plot(inpp.ts, ylab="INPP", xlab="MESES", main="Indice Nacional de Precios al Productor", col=4)
 
