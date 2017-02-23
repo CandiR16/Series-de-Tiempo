@@ -1,0 +1,28 @@
+install.packages("foreign")
+install.packages("readxl")
+library (readxl)
+require(foreign)
+inpp<-read_excel("C://Users//LORENZA//Desktop//ACT 8°/Series de Tiempo//INPP1981-2017.xlsx")
+inpp.ts<-ts (inpp$inpp)
+
+install.packages("tseries") ## para encontrar estadisticos de estacionalidad  
+require(tseries)
+?acf
+acf(inpp.ts, lag=20, plot=FALSE) #lag para obtener los primeros 20 retrasos
+acf(inpp.ts, plot=TRUE)
+inpp.log<- log(inpp.ts) #haciendo logaritmica nuestra serie de tiempo
+kpss.test(inpp.log)
+##un valor menor a .05 indica que NO es estacionario
+
+acf(inpp.log, lag=20, plot=FALSE)
+acf(inpp.log, plot=TRUE)
+
+##### t de Dickey-Fuller aumentada ####
+
+adf.test(inpp.log, alternative = "stationary")
+## un valor menor a .05 indica que es estacionario
+## Grafico sinoidal
+
+
+?Box.test
+Box.test(inpp.ts)
