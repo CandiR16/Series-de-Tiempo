@@ -1,0 +1,28 @@
+install.packages("foreign")
+install.packages("readxl")
+library (readxl)
+require(readxl)
+petroleo<-read_excel("C://Users//Sala-F4//Desktop//petroleo.xlsx")
+petroleo.ts<-ts (petroleo)
+
+install.packages("tseries") ## para encontrar estadisticos de estacionalidad  
+require(tseries)
+?acf
+acf(petroleo.ts, lag=20, plot=FALSE) #lag para obtener los primeros 20 retrasos
+acf(petroleo.ts, plot=TRUE)
+petroleo.log<- log(petroleo.ts) #haciendo logaritmica nuestra serie de tiempo
+kpss.test(petroleo.log)
+##un valor menor a .05 indica que NO es estacionario
+
+acf(petroleo.log, lag=20, plot=FALSE)
+acf(petroleo.log, plot=TRUE)
+
+##### t de Dickey-Fuller aumentada ####
+
+adf.test(petroleo.log, alternative = "stationary")
+## un valor menor a .05 indica que es estacionario
+## Grafico sinoidal
+
+
+?Box.test
+Box.test(petroleo.ts)
