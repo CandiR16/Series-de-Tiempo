@@ -1,0 +1,32 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+require(foreign)
+require(readxl)
+
+ba<-read_excel("C://Users//Sala-F3//Downloads//base.xlsx")
+?lm
+View(ba)
+
+## Regresión
+## Guardar el modelo con una variable
+ba.lm<-lm(peso~talla,ba)
+
+## Extraemos los coeficientes (betas)
+betas=coefficients(ba.lm);betas
+
+## Coeficiente de determinación
+summary(ba.lm)$r.squared  ## aprox el 78% de la variacion en x esta explicada por "y" o el 78% de la variación en y esta explicada en "x"
+## la estatura es un predictor de su peso
+
+## Prueba F
+## Se quiere rechazar la hipotesis nula si el valor estadistica es menor a .05 la Ho es nula
+summary(ba.lm)
+
+## Valores predichos IC95%
+predict(ba.lm, ba, interval="predict", level=.95)
+# el valor que predijo el modelo y=86.8442 li 
+
+## Gráfico de residuos
+loquesobra<- residuals(ba.lm)
+plot(jitter(loquesobra)~jitter(talla), ylab="Residuos", xlab="Talla", data=ba)
+abline(0,0, col="red")
