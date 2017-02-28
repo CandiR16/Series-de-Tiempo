@@ -1,0 +1,44 @@
+install.packages("foreign")                                                    
+require(foreign)   
+install.packages("readxl")                                                    
+require(readxl)         
+###############################################################################################################
+########################################          Ajuste de Tendencia             #############################
+##############################################################################################################
+
+ventas <- read_excel("C://Users//Sala-F4//Downloads//ejemplo.xlsx")   
+ventas.ts<-ts(ventas,start=c(2012,1),frequency = 6)
+plot(ventas.ts, xlab="Periodo de tiempo", ylab="Ventas en millones", main="Ventas en millones de euros", col="blue")
+
+ventas.des<-decompose(ventas.ts,"additive")
+cycle(ventas.ts) ###detectando patron estacional como leyo los datos o como los acomodo
+boxplot(ventas.ts~cycle(ventas.ts))  # muestra media de las ventas de cada periodo
+
+plot(as.ts(ventas.des$seasonal)) #estacionalidad
+plot(as.ts(ventas.des$trend))    #tendencia
+plot(as.ts(ventas.des$random))   # aleatoriedad
+plot(ventas.des)                 ### muestra los 4 en un solo gráfico
+
+par(mfrow=c(1,3))           ######### row=por fila por tres variables grafica lo mismo pero ordenando fila por columna
+plot(as.ts(ventas.des$seasonal)) 
+plot(as.ts(ventas.des$trend))   
+plot(as.ts(ventas.des$random))
+ 
+#Extraer tendencia (Tt) con el método loos, funcion(stl)
+ventas1.ts<-ts(ventas[1:24,1], frequency=6 , start=c(2012,1))  # ventas[1:24,1] =>24 filas y una columna 
+class(ventas1.ts)
+
+ventas.stl<-stl(ventas1.ts, s.window = "periodic")  #periodic=> todo es periodico
+names(ventas.stl)
+ventas.stl
+
+ventas.tend<-ventas.stl$time.series[,2]  ##es el componente de  tendencia  que tiene el objeto ventas.stl y le recordamos que 
+## es una serie de tiempo [,2]=> se consideran solo columnas
+ventas.tend
+
+plot(ventas1.ts, col="blue", main="Ventas en millones de euros", ylab="valores de la tendencia", xlab="periodo")
+lines(ventas.stl$time.series[,2],col="red", ylab="Tendencia")
+#de un grafico anterior mete una linea sobre el grafico actual  , tendencia aislada=rojo, azul=es la serie de tiempo
+summary(ventas.tend)
+mean(ventas.stl$time.series[,2])  ##la media de la tendencia
+
