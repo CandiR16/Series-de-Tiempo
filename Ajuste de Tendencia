@@ -41,4 +41,11 @@ lines(ventas.stl$time.series[,2],col="red", ylab="Tendencia")
 #de un grafico anterior mete una linea sobre el grafico actual  , tendencia aislada=rojo, azul=es la serie de tiempo
 summary(ventas.tend)
 mean(ventas.stl$time.series[,2])  ##la media de la tendencia
+###############################################################################################################
+#########################Regresión con series de tiempo (Yt) y una variable predictora#############################
+##############################################################################################################
+install.packages("forecast") #libreria para hacer proyecciones
+# Funcion(stlm)
+# se utiliza para adaptar modelos lineales a series temporales incluyendo componentes de temdemcia y estacionalidad
+# tslm(formula,data.subset,lamda=Null), biasaj=FALSE)
 
