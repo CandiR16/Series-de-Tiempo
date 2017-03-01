@@ -1,0 +1,40 @@
+###############################################################################################################
+########################################          Ajuste de Tendencia             #############################
+##############################################################################################################
+
+inpp <- read_excel("C://Users//Sala-F4//Downloads//inpp.xlsx")   
+inpp.ts<-ts(inpp,start=c(2012,1),frequency = 6)
+plot(inpp.ts, xlab="Periodo de tiempo", ylab="Índice", main="INPP", col="blue")
+
+inpp.des<-decompose(inpp.ts,"additive")
+cycle(inpp.ts) ###detectando patron estacional como leyo los datos o como los acomodo
+boxplot(inpp.ts~cycle(inpp.ts))  # muestra media de las ventas de cada periodo
+
+plot(as.ts(inpp.des$seasonal)) #estacionalidad
+plot(as.ts(inpp.des$trend))    #tendencia
+plot(as.ts(inpp.des$random))   # aleatoriedad
+plot(inpp.des)                 ### muestra los 4 en un solo gráfico
+
+par(mfrow=c(1,3))           ######### row=por fila por tres variables grafica lo mismo pero ordenando fila por columna
+plot(as.ts(inpp.des$seasonal)) 
+plot(as.ts(inpp.des$trend))   
+plot(as.ts(inpp.des$random))
+ 
+#Extraer tendencia (Tt) con el método loos, funcion(stl)
+inpp1.ts<-ts(inpp[1:24,1], frequency=6 , start=c(2012,1))  # ventas[1:24,1] =>24 filas y una columna 
+class(inpp1.ts)
+
+inpp.stl<-stl(inpp1.ts, s.window = "periodic")  #periodic=> todo es periodico
+names(inpp.stl)
+inpp.stl
+
+inpp.tend<-inpp.stl$time.series[,2]  ##es el componente de  tendencia  que tiene el objeto ventas.stl y le recordamos que 
+## es una serie de tiempo [,2]=> se consideran solo columnas
+inpp.tend
+
+plot(inpp1.ts, col="blue", main="INPPP", ylab="índice", xlab="periodo")
+lines(inpp.stl$time.series[,2],col="red", ylab="Tendencia")
+#de un grafico anterior mete una linea sobre el grafico actual  , tendencia aislada=rojo, azul=es la serie de tiempo
+summary(inpp.tend)
+mean(inpp.stl$time.series[,2])  ##la media de la tendencia
+
