@@ -1,0 +1,40 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+require(foreign)
+require(readxl)
+install.packages("forecast") #libreria para hacer proyecciones
+require(forecast)
+###############################################################################################################
+#########################Regresión con series de tiempo (Yt) y una variable predictora#############################
+##############################################################################################################
+# Funcion(stlm)
+# se utiliza para adaptar modelos lineales a series temporales incluyendo componentes de tendencia y estacionalidad
+# tslm(formula,data.subset,lamda=Null), biasaj=FALSE)
+
+indicators <- read_excel("C://Users//Sala-F3//Downloads//indicators.xlsx") 
+indicators1.ts<-ts(indicators$gdp_capita)
+indicators.ts<-ts(indicators$co2)
+
+#indicators.ts<-ts(gdp_capita, data=indicators)
+#indicators.ts<-ts(co2, data=indicators)
+
+View(indicators.ts)
+plot(indicators.ts)
+
+
+estimado.ts<-tslm(indicators1.ts~indicators.ts)
+summary(estimado.ts)
+
+#función no lineal (log-log)
+par(mfrow=c(1,2))
+est.ts2<-lm(log(indicators1.ts)~log(indicators.ts))
+summary(est.ts2)
+windows()
+plot(jitter(indicators1.ts)~jitter(indicators.ts),xlab="Toneladas de CO2", ylab = "Gross Domestic Product", type=line)
+lines(1:54,exp(est.ts2$coef[1]+est.ts2$coef[2]*log(1:54)))  #comportamiento lineal
+plot(log(jitter(indicators1.ts))~log(jitter(indicators.ts)),xlab="log(co2)",ylab="log(gdp)")
+abline(est.ts2,col="red")  #comportamiento no lineal
+
+#Residuos(log-log)
+residuos.log<-residuals(est.ts2)
+plot(jitter(residuos.log, amount=.005)~jitter(log(indicators.ts)),ylab="Residuos",xlab="Log(co2)", col="blue")
