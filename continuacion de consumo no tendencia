@@ -1,0 +1,35 @@
+#Extraer tendencia (Tt)con el método loess, funcion(stl)
+consumo.ts<-ts(consumo[1:56,1],frequency=12,start=c(1910,1), end=c(1915,8))
+class(consumo.ts)
+View(consumo.ts)
+plot(consumo.ts)
+dim(consumo)
+
+consumo.stl<-stl(consumo.ts, s.window="periodic", robust=T) #robust=interaciones en un modelo  
+names(consumo.stl)
+consumo.stl
+
+consumo.tend<-consumo.stl$time.series[,2]
+consumo.tend
+ plot(consumo.ts, col="blue", main="Consum de productos", ylab="Tendencia", xlab="Periodo")
+lines(consumo.stl$time.series[,2],col="red", ylab="Tendencia")
+
+#Eliminar Tendencia (Tt) de Yt
+consumo.ntend=consumo.ts/consumo.des$tren  #se elimina para aislar o determinar los componentes estacionales de la serie
+plot(as.ts(consumo.ntend), col="red")
+
+par(mfrow=c(1,2))
+plot(consumo.ts,col="blue")
+plot(consumo.ntend, col="red")
+
+
+##Ajuste Estacional
+install.packages("fpp") #para dar ajuste estacional 
+library(fpp)
+plot(consumo.ts)
+plot(consumo.stl)
+
+monthplot(consumo.stl$time.series[,"seasonal"],main="Componente estacional por meses", ylab="Componente estacional")
+
+plot(consumo.ts, col="black", main="ajuste estacional", xlab="periodo", ylab="Indice estacional" )
+lines(seasadj(consumo.stl),col="red", ylab="ajustado")
