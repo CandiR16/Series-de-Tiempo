@@ -1,0 +1,33 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+install.packages("forecast") #libreria para hacer proyecciones , funcion: stl
+install.packages("fpp") #para dar ajuste estacional 
+require(foreign)
+require(readxl)
+require(forecast)
+library(fpp)
+
+#############################################################################################################
+#####################################             PRONÓSTICOS           #####################################
+#############################################################################################################
+
+ventas <- read_excel("C://Users/Sala-F3/Downloads//ejemplo3.xlsx")
+ventas.ts<-ts(ventas, start=c(2010,1), frequency=12)
+plot(ventas.ts, xlab="Periodo",ylab="Ventas en Millones", main="Serie Temporal")
+
+
+##########################       Método de la Media (Average Method)       ##################################
+help(meanf)
+meanf(ventas.ts , h=10)
+
+##########################          Método del Ingenuo (Naive Method)      ##################################
+help(naive)
+naive(ventas.ts, h=10)  
+# naive estacional implica que la serie tiene estacionalidad
+snaive(ventas.ts, h=10)
+rwf(ventas.ts, h=10)
+
+##########################           Método de Deriva (Drift Method)       ##################################
+help(rwf)
+rwf(ventas.ts, h=10, drift=TRUE)
+ventas.tsp<-window(ventas.ts, start=c(2010,1), frequency=)
