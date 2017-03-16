@@ -1,0 +1,32 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+install.packages("forecast") #libreria para hacer proyecciones , funcion: stl
+install.packages("fpp") #para dar ajuste estacional 
+require(foreign)
+require(readxl)
+require(forecast)
+library(fpp)
+
+#############################################################################################################
+#####################################         PRONÓSTICOS (IPC)         #####################################
+#############################################################################################################
+
+##ipc <- read_excel("C://Users/Sala-F3/Downloads//ipc.xlsx")
+ipc.ts<-ts(ipc, start=c(1999,1), frequency=12)
+plot(ipc.ts, xlab="Periodo",ylab="IPC", main="Serie Temporal del IPC")
+
+
+##########################       Método de la Media (Average Method)       ##################################
+help(meanf)
+meanf(ipc.ts , h=12)
+
+##########################          Método del Ingenuo (Naive Method)      ##################################
+help(naive)
+naive(ipc.ts, h=12)  
+# naive estacional implica que la serie tiene estacionalidad
+snaive(ipc.ts, h=12)
+rwf(ipc.ts, h=12)
+
+##########################           Método de Deriva (Drift Method)       ##################################
+help(rwf)
+rwf(ipc.ts, h=12, drift=TRUE)
