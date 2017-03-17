@@ -1,0 +1,58 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+install.packages("forecast") #libreria para hacer proyecciones , funcion: stl
+install.packages("fpp") #para dar ajuste estacional 
+require(foreign)
+require(readxl)
+require(forecast)
+library(fpp)
+
+#############################################################################################################
+#####################################         PRONÓSTICOS (IPC)         #####################################
+#############################################################################################################
+
+ipc <- read_excel("C://Users/Sala-F4/Downloads//ipc.xlsx")
+ipc.ts<-ts(ipc, start=c(1999,1), frequency=12)
+plot(ipc.ts, xlab="Periodo",ylab="IPC", main="Serie Temporal del IPC")
+
+
+##########################       Método de la Media (Average Method)       ##################################
+help(meanf)
+meanf(ipc.ts , h=12)
+
+##########################          Método del Ingenuo (Naive Method)      ##################################
+help(naive)
+naive(ipc.ts, h=12)  
+# naive estacional implica que la serie tiene estacionalidad
+snaive(ipc.ts, h=12)
+rwf(ipc.ts, h=12)
+
+##########################           Método de Deriva (Drift Method)       ##################################
+help(rwf)
+rwf(ipc.ts, h=12, drift=TRUE)
+
+##########################           Método de Deriva (Drift Method)       ##################################
+help(rwf)
+rwf(ipc.ts, h=10, drift=TRUE)
+
+ipc.tsp<-window(ipc.ts, start=c(2010,1), frequency=12)
+ipc.meanf<-meanf(ipc.tsp,h=20)
+ipc.naive<-naive(ipc.tsp,h=20)
+ipc.snaive<-snaive(ipc.tsp,h=20)
+
+plot(ipc.meanf,plot.conf=FALSE, main="Pronósticos del IPC") 
+#plot.conf=grafica intervalos de confianza
+lines(ipc.naive$mean,col=2)
+lines(ipc.snaive$mean,col=3)
+legend("top",lty=2,col=c(4,2,3),legend=c("Método de la Media","Método Naive","Método Naive Estacional"))
+# top=ubicacion de la leyenda en donde va a poner los nombres 
+# lty = que tipo de linea queremos
+
+plot(ipc.meanf,shaded=TRUE, main="Pronósticos del valor de ventas") 
+## shaded =sombre los intervalos de confianza
+lines(ipc.naive$mean,col=2)
+lines(ipc.snaive$mean,col=3)
+legend("top",lty=1,col=c(4,2,3),legend=c("Método de la Media","Método Naive","Método Naive Estacional"))
+
+
+
