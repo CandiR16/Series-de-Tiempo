@@ -1,0 +1,50 @@
+install.packages("foreign")#paquete para lectura de excel
+install.packages("readxl")
+install.packages("gdata")
+install.packages("forecast") #libreria para hacer proyecciones , funcion: stl
+install.packages("fpp") #para dar ajuste estacional 
+require(foreign)
+require(readxl)
+require(forecast)
+library(fpp)
+library(gdata)
+#############################################################################################################
+##############################             Pronósticos Con Regresión           ##############################
+#############################################################################################################
+ba <- read_excel("C://Users/Sala-F3/Downloads//basea.xlsx")
+plot(jitter(consumo)~jitter(ingresos),xlab="Ingresos", ylab="Consumo", data=ba) #valores de la regresión
+estimado<-lm(consumo~ingresos, data=ba)
+abline(estimado, col="red")
+summary(estimado)
+
+#################################               RESIDUOS             ########################################
+residuos<-residuals(estimado)
+plot(jitter(residuos)~jitter(ingresos),xlab="Ingresos", ylab="Residuos", data=ba)  #y=residuos   x=Ingresos
+abline(0,0, col="red")
+
+##########################              Pronósticos con Regresión            ################################
+fitted(estimado)[1]
+pronosticos<-forecast(estimado,newdata=data.frame(ingresos=3000))
+plot(pronosticos, xlab="Ingresos", ylab="Consumo")  #lo más oscuro es ak 95%  y lo más claro es al 80%
+
+par(mforw=c(1,2))
+estimado.log<-lm(log(consumo)~log(ingresos),data=ba)
+
+
+
+
+ba.log<- log(ba)
+plot(jitter(consumo)~jitter(ingresos),xlab="Ingresos", ylab="Consumo", data=ba.log) #valores de la regresión
+estimado<-lm(consumo~ingresos, data=ba.log)
+abline(estimado, col="red")
+summary(estimado)
+
+#################################               RESIDUOS             ########################################
+residuos<-residuals(estimado)
+plot(jitter(residuos)~jitter(ingresos),xlab="Ingresos", ylab="Residuos", data=ba.log)  #y=residuos   x=Ingresos
+abline(0,0, col="red")
+
+##########################              Pronósticos con Regresión            ################################
+fitted(estimado)[1]
+pronosticos<-forecast(estimado,newdata=data.frame(ingresos=3000))
+plot(pronosticos, xlab="Ingresos", ylab="Consumo")  #lo más oscuro es ak 95%  y lo más claro es al 80%
