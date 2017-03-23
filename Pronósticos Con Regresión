@@ -48,3 +48,8 @@ abline(0,0, col="red")
 fitted(estimado)[1]
 pronosticos<-forecast(estimado,newdata=data.frame(ingresos=3000))
 plot(pronosticos, xlab="Ingresos", ylab="Consumo")  #lo más oscuro es ak 95%  y lo más claro es al 80%
+
+
+
+est.l <- lm(log(consumo)~log(ingresos), data = bas)
+plot(est.l)
