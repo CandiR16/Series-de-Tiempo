@@ -1,0 +1,35 @@
+#############################################################################################################
+####################              Regresión  Yt con serie de tiempo                      ####################
+#############################################################################################################
+install.packages("forecast")
+install.packages("readxl")
+require(forecast)
+require(readxl)
+base <- read_excel("C://Users/Sala-F3/Downloads//base (1).xlsx")
+
+consuingreso.ts<-ts(base)
+View(consuingreso.ts)  #solo para ver si esta tomando en cuenta que es serie de tiempo 
+plot(consuingreso.ts)
+regresion<-tslm(consumo~ingresos, data=consuingreso.ts) # tslm para hacer regresion con serie de tiempo
+summary(regresion)
+
+## Pronósticos basados en escenarios Yt
+#Incrementos o decrementos porcentuales
+pronosticos.1p<-forecast(regresion,newdata=data.frame(ingresos=c(-1,1)))
+summary(pronosticos.1p)
+plot(pronosticos.1p)
+
+
+
+############################################################################################################
+#  TONELADAS
+toneladas <- read_excel("C://Users/Sala-F3/Downloads//toneladas.xlsx") #azúcar que emplea coca-cola semestralmente
+toneladas.ts<-ts(toneladas)
+View(toneladas.ts)
+plot(toneladas.ts)
+pronosticos.lin<-tslm(toneladas.ts~trend)
+plot(pronosticos.lin) 
+pronosticoslin1<-forecast(pronosticos.lin, h=15)
+plot(pronosticoslin1, ylab="Toneladas de Azúcar", xlab="Tiempo")
+lines(fitted(pronosticoslin1),col="blue") #valores ajustados---regresión lineal
+summary(pronosticoslin1)
