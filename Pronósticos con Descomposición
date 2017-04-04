@@ -1,0 +1,20 @@
+#############################################################################################################
+###########################             Pronósticos con Descomposición              #########################
+#############################################################################################################
+
+compras<- read_excel("C://Users/Sala-F3/Downloads//base2.xlsx")
+View(compras)
+compras.ts<-ts(compras,start=c(2000), end=c(2013), frequency=12)
+plot(compras.ts, col="blue")
+c.desc<-decompose(compras.ts, type="multiplicative")
+plot(c.desc)
+####Descomposición con ajuste estacional y de tendencia con la funcion stl()
+c.desc.stl<-stl(compras.ts, t.window = 12, s.window = "periodic")
+windows()
+plot(c.desc.stl)
+pronosticos<-stl(compras.ts,t.window = 12, s.window = "periodic", robust=T)
+ajustada<-seasadj(pronosticos)#pronosticos de la estacionalidad
+plot(naive(ajustada)) #naive es para el pronosticos
+?naive
+pronosticos.naive<-forecast(pronosticos, method="naive")
+plot(pronosticos.naive)
