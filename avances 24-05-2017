@@ -1,0 +1,102 @@
+install.packages("readxl") #Instalamos paquete para poder leer un archivo en formato xlsx
+require(readxl)
+install.packages("forecast") #Instalamos paquete que es útil para hacer pronósticos
+require(forecast)
+inpc<-read_excel("C://Users//SALA-E23//Downloads//INPC.xlsx") #Se pone la dirección en donde esta ubicado el archivo
+inpc1<-ts(inpc$INPC,frequency =12, start = c(1982,1)) #Se hacen los datos una serie de tiempo e indicamos que es mensual y desde que año y mes comienza
+inpc1sub<-ts(inpc$SUBYA,frequency =12, start = c(1982,1))
+inpc1nosub<-ts(inpc$NOSUBYA,frequency =12, start = c(1982,1))
+View(inpc1)
+plot(inpcd$random, xlab = "Año", ylab= "Variaciòn", main = "Variacion")#Realizamos esta grafica para observar el comportamiento aleatorio 
+plot(inpc1, xlab="Año", ylab="INPC", main="Gráfica 5. Serie de Tiempo del INPC: 1982-2017",
+     sub="Fuente: Elaboración propia con datos de INEGI", ylim=c(0,135), xlim=c(1982,2017), type="l",font.main=4,
+     axes=TRUE, ann=TRUE,lty=1,  col="green", lwd=3) #graficamos nuestra serie principal y damos formato
+lines(inpc1sub, col="red", lty=2,  lwd=3) #Agregamos las lineas del INPC SUBYACENTE
+lines(inpc1nosub, col="purple",lty=3, lwd=3) #Agregamos las lineas del INPC  NO SUBYACENTE
+legend(x=1982,y=135,c("INPC","INPC-SUB","INPC-NOSUB"), cex=0.8, bty="n", col=c("green","red","purple"), lty=1:3) #Agregamos una leyenda 
+
+
+#Descomposicion de la serie inpc
+inpcd<-decompose(inpc1,"multiplicative") #Escogimos el metodo multiplicativo porque se observo un crecimiento exponencial
+cycle(inpc1)  
+boxplot(inpc1~cycle(inpc1))  
+
+#Descomposicion de la serie inpc sub
+inpcdsub<-decompose(inpc1sub,"multiplicative")
+cycle(inpc1sub) 
+boxplot(inpc1sub~cycle(inpc1sub))  
+
+#Descomposicion de la serie inpc no sub
+inpcdnosub<-decompose(inpc1nosub,"multiplicative")
+cycle(inpc1nosub) 
+boxplot(inpc1nosub~cycle(inpc1sub))  
+
+plot(inpcd)
+########     Pronósticos     ########
+##  Método del Ingenuo (Naive Method)  
+naive(inpc1,h=12, sub)
+
+##  Método de Deriva (Drift Method) 
+rwf(inpc1,h=12,drift=TRUE)
+
+##  Método de la Media (Average Method) 
+meanf(inpc1,h=12)
+
+
+x11()
+par(mfrow= c(3,3))
+plot(naive(inpc1), col="green", sub="INPC", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(rwf(inpc1), col="green",sub="INPC", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(meanf(inpc1),col="green",sub="INPC", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(naive(inpc1sub), col="red",sub="INPC-SUB", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(rwf(inpc1sub), col="red",sub="INPC-SUB", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(meanf(inpc1sub),col="red",sub="INPC-SUB", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(naive(inpc1nosub), col="purple", sub="INPC-NOSUB", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(rwf(inpc1nosub), col="purple", sub="INPC-NOSUB", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+plot(meanf(inpc1nosub),col="purple", sub="INPC-NOSUB", ylim=c(0,135), xlim=c(1982,2017),xlab="Año", ylab="INPC")
+
+##  Holt: exponenciado doble
+##  Método propicio para pronosticar datos con tendencia pero sin estacionalidad.
+##  Aplicamos este método por que como pudimos ver nuestra serie temporal tiende tendencia
+##  pero no estacionalidad 
+par(mfrow= c(1,3))
+#### Holt para INPC
+inpc1h <- holt(inpc1, alpha=0.99, beta=0.85, h=12)
+# Resultados:
+inpc1h$model$state
+plot(inpc1h, type="l", ylab="Suavizado Método de Holt", xlab="Año", main="INPC: Pronósticos por Método Holt", 
+     plot.conf=FALSE, sub="Fuente: Elaboración propia, usando datos de INEGI",ylim=c(0,135),
+     xlim=c(1982,2018), lwd=2, col="green")
+lines(fitted(inpc1h), col="black")
+lines(inpc1h$mean, col="blue", type="l")
+legend("topleft", lty=1, col=c("green","black","blue"), bty="n",
+       c("Observados","Holt's suavizado de tendencia 1","Pronóstico a 1 año"), cex=.15)
+summary(inpc1h)
+
+#### Holt para INPC-SUB
+inpc2h <- holt(inpc1sub, alpha=0.99, beta=0.85, h=12)
+# Resultados:
+inpc2h$model$state
+plot(inpc2h, type="l", ylab="Suavizado Método de Holt", xlab="Año", main="INPC-SUB: Pronósticos por Método Holt", 
+     plot.conf=FALSE, sub="Fuente: Elaboración propia, usando datos de INEGI",ylim=c(0,135),
+     xlim=c(1982,2018), lwd=2, col="red")
+lines(fitted(inpc2h), col="black")
+lines(inpc2h$mean, col="blue", type="l")
+legend("topleft", lty=1, col=c("red","black","blue"), bty="n",
+       c("Observados","Holt's suavizado de tendencia 1","Pronóstico a 1 año"), cex=.15)
+summary(inpc2h)
+
+#### Holt para INPC-NOSUB
+inpc3h <- holt(inpc1nosub, alpha=0.99, beta=0.85, h=12)
+# Resultados:
+inpc3h$model$state
+plot(inpc3h, type="l", ylab="Suavizado Método de Holt", xlab="Año", main="INPC-NOSUB: Pronósticos por Método Holt", 
+     plot.conf=FALSE, sub="Fuente: Elaboración propia, usando datos de INEGI",ylim=c(0,135),
+     xlim=c(1982,2018), lwd=2, col="purple")
+lines(fitted(inpc3h), col="black")
+lines(inpc3h$mean, col="blue", type="l")
+legend("topleft", lty=1, col=c("purple","black","blue"), bty="n",
+       c("Observados","Holt's suavizado de tendencia 1","Pronóstico a 1 año"), cex=.15)
+summary(inpc3h)
+
+
